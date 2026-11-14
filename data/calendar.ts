@@ -1,4 +1,4 @@
-// Civilization II's four calendars (OpenCiv2 `src/auto/game.cpp` `game_turn_to_year`, :4042), read from the table at
+// Civilization II's four calendars (OpenCiv2 `src/auto/game.cpp` `game_turn_to_year`, richardpenman/civ2@49f26ec), read from the table at
 //  0x62c490 in civ2.exe (OpenCiv2 `src/data/gamedata.cpp`, `year_table_start_years_block`). Each is six periods of
 //  `[start year, turns, years per turn]`; after the sixth, every turn is a year.
 export type Period = readonly [startYear: number, turns: number, step: number];

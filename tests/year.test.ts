@@ -6,7 +6,9 @@ import King from '@civ-clone/base-difficulty-king/King';
 import Prince from '@civ-clone/base-difficulty-prince/Prince';
 import RuleRegistry from '@civ-clone/core-rule/RuleRegistry';
 import Warlord from '@civ-clone/base-difficulty-warlord/Warlord';
+import Turn from '@civ-clone/core-turn-based-game/Turn';
 import Year from '@civ-clone/core-game-year/Rules/Year';
+import GameYear from '@civ-clone/core-game-year/Year';
 import { expect } from 'chai';
 import turnYear from '../Rules/Turn/year';
 
@@ -146,5 +148,66 @@ describe('the Year rule', (): void => {
 
     launches.push(false, 200, 190);
     expect(year(200)).equal(yearOf(190, 1) + 10);
+  });
+});
+
+describe('the years a game keeps', (): void => {
+  // Two games in one process sharing the `Year`, as the default game's rules and registries are reused.
+  const setUp = () => {
+    const ruleRegistry = new RuleRegistry(),
+      gameDifficultyRegistry = new GameDifficultyRegistry(),
+      worlds: { width: () => number; height: () => number }[] = [];
+
+    ruleRegistry.register(
+      ...turnYear(
+        gameDifficultyRegistry,
+        { entries: () => worlds } as any,
+        { entries: () => [] } as any
+      )
+    );
+
+    return {
+      gameDifficultyRegistry,
+      worlds,
+      year: new GameYear(new Turn(), ruleRegistry),
+    };
+  };
+
+  it('are worked out again for a second game at another level', (): void => {
+    const { gameDifficultyRegistry, worlds, year } = setUp();
+
+    worlds.push({ width: () => 50, height: () => 80 });
+    gameDifficultyRegistry.set(Chieftain);
+    expect(year.value(252)).equal(1010);
+
+    // The next game, at Deity, on the same map size.
+    gameDifficultyRegistry.set(Deity);
+    expect(year.value(252)).equal(yearOf(252, 3));
+
+    // And back: each is kept under its own calendar.
+    gameDifficultyRegistry.set(Chieftain);
+    expect(year.value(252)).equal(1010);
+  });
+
+  it('are worked out again once the world exists, when its size changes the calendar', (): void => {
+    const { gameDifficultyRegistry, worlds, year } = setUp();
+
+    gameDifficultyRegistry.set(Prince);
+    // No world yet: Prince on a normal map.
+    expect(year.value(102)).equal(10);
+
+    // A small map moves Prince to calendar 2 (King's).
+    worlds.push({ width: () => 40, height: () => 50 });
+    expect(year.value(102)).equal(20);
+  });
+
+  it('do not reuse a year from before the world even when the calendar is the same', (): void => {
+    const { gameDifficultyRegistry, worlds, year } = setUp();
+
+    gameDifficultyRegistry.set(King);
+    expect(year.value(102)).equal(20);
+
+    worlds.push({ width: () => 50, height: () => 80 });
+    expect(year.value(102)).equal(20);
   });
 });

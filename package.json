@@ -24,6 +24,7 @@
     "@civ-clone/base-difficulty-king": "^0.1.0",
     "@civ-clone/base-difficulty-prince": "^0.1.0",
     "@civ-clone/base-difficulty-warlord": "^0.1.0",
+    "@civ-clone/core-turn-based-game": "^0.1.10",
     "@types/chai": "^4.0.0",
     "@types/mocha": "^10.0.0",
     "@types/node": "^16.0.0",
@@ -37,8 +38,8 @@
     "@civ-clone/civ2-difficulty": "github:civ-clone/civ2-difficulty#feat/difficulty",
     "@civ-clone/civ2-rules": "github:civ-clone/civ2-rules#feat/cosmic",
     "@civ-clone/core-difficulty": "^0.1.0",
-    "@civ-clone/core-game": "^0.1.9",
-    "@civ-clone/core-game-year": "^0.1.4",
+    "@civ-clone/core-game": "^0.1.17",
+    "@civ-clone/core-game-year": "github:civ-clone/core-game-year#feat/year-key",
     "@civ-clone/core-player-world": "^0.1.14",
     "@civ-clone/core-rule": "^0.1.9",
     "@civ-clone/core-spaceship": "^0.1.10"
