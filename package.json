@@ -1,0 +1,46 @@
+{
+  "name": "@civ-clone/civ2-game-year",
+  "version": "0.1.0",
+  "description": "Civilization II's calendars: the year of each turn, by level and map size.",
+  "main": "index.js",
+  "repository": "git@github.com:civ-clone/civ2-game-year.git",
+  "keywords": [
+    "typescript",
+    "civilization"
+  ],
+  "author": "dom111 <dom111@users.noreply.github.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "npm run ts:compile && npm run prettier:format",
+    "prettier:check": "prettier --config .prettierrc --check '**/*.ts'",
+    "prettier:format": "prettier --config .prettierrc '**/*.ts' --write",
+    "test": "ts-mocha ./tests/*.test.ts",
+    "ts:compile": "tsc --build tsconfig.json"
+  },
+  "devDependencies": {
+    "@civ-clone/base-difficulty-chieftain": "^0.1.0",
+    "@civ-clone/base-difficulty-deity": "^0.1.0",
+    "@civ-clone/base-difficulty-king": "^0.1.0",
+    "@civ-clone/base-difficulty-prince": "^0.1.0",
+    "@civ-clone/base-difficulty-warlord": "^0.1.0",
+    "@types/chai": "^4.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^16.0.0",
+    "chai": "^4.0.0",
+    "mocha": "^10.0.0",
+    "prettier": "^2.8.8",
+    "ts-mocha": "^10.0.0",
+    "typescript": "^4.0.0"
+  },
+  "dependencies": {
+    "@civ-clone/civ2-difficulty": "github:civ-clone/civ2-difficulty#feat/difficulty",
+    "@civ-clone/civ2-rules": "github:civ-clone/civ2-rules#feat/cosmic",
+    "@civ-clone/core-difficulty": "^0.1.0",
+    "@civ-clone/core-game": "^0.1.9",
+    "@civ-clone/core-game-year": "^0.1.4",
+    "@civ-clone/core-player-world": "^0.1.14",
+    "@civ-clone/core-rule": "^0.1.9",
+    "@civ-clone/core-spaceship": "^0.1.10"
+  }
+}
