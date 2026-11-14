@@ -1,5 +1,6 @@
 import { calendarFor, yearOf } from '../lib/calendar';
 import Chieftain from '@civ-clone/base-difficulty-chieftain/Chieftain';
+import Effect from '@civ-clone/core-rule/Effect';
 import Deity from '@civ-clone/base-difficulty-deity/Deity';
 import GameDifficultyRegistry from '@civ-clone/core-difficulty/GameDifficultyRegistry';
 import King from '@civ-clone/base-difficulty-king/King';
@@ -168,6 +169,7 @@ describe('the years a game keeps', (): void => {
 
     return {
       gameDifficultyRegistry,
+      ruleRegistry,
       worlds,
       year: new GameYear(new Turn(), ruleRegistry),
     };
@@ -202,12 +204,29 @@ describe('the years a game keeps', (): void => {
   });
 
   it('do not reuse a year from before the world even when the calendar is the same', (): void => {
-    const { gameDifficultyRegistry, worlds, year } = setUp();
+    const { gameDifficultyRegistry, ruleRegistry, worlds, year } = setUp(),
+      worked: number[] = [];
+
+    // Counts each time the year is worked out rather than kept: `Year` takes the first rule's answer.
+    ruleRegistry.register(
+      new Year(
+        new Effect((turn: number): number => {
+          worked.push(turn);
+
+          return 0;
+        })
+      )
+    );
 
     gameDifficultyRegistry.set(King);
+    expect(year.value(102)).equal(20);
     expect(year.value(102)).equal(20);
 
     worlds.push({ width: () => 50, height: () => 80 });
     expect(year.value(102)).equal(20);
+    expect(year.value(102)).equal(20);
+
+    // Once without a world, and once more when it exists, though both years are the same.
+    expect(worked).eql([102, 102]);
   });
 });
